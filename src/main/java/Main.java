@@ -2,18 +2,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
-
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,43 +30,54 @@ class PolosaRazgonaException extends Exception{
 }
 
 
-public class Airport implements Serializable{
+class Airport implements Serializable{
     private String name;
-    public ArrayList<F_a> f_as = new ArrayList<>();
-    public Airport(){
+    private ArrayList<F_a> f_as = new ArrayList<>();
+    
+    public Airport(String new_name){
+        this.name = new_name;
     }
+    
     public ArrayList<F_a> getF_as(){
         return this.f_as;
     }
+    
     public void addF_a(F_a f_a){
         this.f_as.add(f_a);
     }
+    
     public String getName(){
         return this.name;
     }
+    
     public void setName(String new_name){
         this.name = new_name;
     }
 }
-public class F_a implements Serializable{
-    public String name;
-    public int sits;
+
+
+class F_a implements Serializable{
+    private String name;
+    private int sits;
     public String type;
-    public Airport airport;
-    public ArrayList<Passeger> passegers = new ArrayList<>();
-    public F_a(){}
+    private Airport airport;
+    private ArrayList<Passeger> passegers = new ArrayList<>();
+    
     public F_a(String new_name, int sits, String type){
         this.name = new_name;
         this.sits = sits;
         this.type = type;
     }
+    
     public void set_airport(Airport airport){
         this.airport = airport;
         this.airport.addF_a(this);
     }
+    
     public ArrayList<Passeger> get_passegers(){
         return passegers;
     }
+    
     public void add_passeger(Passeger passeger){
         try{
             if (this.passegers.size() == this.sits)
@@ -87,30 +89,36 @@ public class F_a implements Serializable{
             System.out.println(ex.getMessage());
         }
     }
+    
     public void setName(String new_name){
         this.name = new_name;
     }
+    
     public String getName(){
         return this.name;
     }
+    
     public void setSits(int new_sits){
         this.sits = new_sits;
     }
+    
     public int getSits(){
         return this.sits;
     }
+    
     public String upp(){ //Исключение: Если нет имени
         return ("Летательный аппарат "+ this.name+ " взлетел успешно!");
     }
+    
     public int get_num_sits(){
         return passegers.size();
     }
 }
 
 
-public class Plane extends F_a{
-    public int len;
-    public Plane(){}
+class Plane extends F_a{
+    private int len;
+    
     public Plane(String name, int new_sits, int new_len) throws PolosaRazgonaException{
         super(name,new_sits, "Самолет");
         try{
@@ -124,49 +132,58 @@ public class Plane extends F_a{
             throw ex;
         }
     }
+    
     public void setLen(int new_len){
         this.len = new_len;
     }
+    
     public int getLen(){
         return this.len;
     }
+    
+    @Override
     public String upp(){
         return ("Самолет "+ this.getName()+ " взлетел успешно!");
     }
 }
 
 
-public class Helicopter extends F_a{
-    public Helicopter(){}
+class Helicopter extends F_a{
+
     public Helicopter(String name, int max_count){
         super(name, max_count, "Вертолет");
     }
+    @Override
     public String upp(){
         return ("Вертолет "+ this.getName()+ " взлетел успешно!");
     }
 }
 
 
-public class Passeger implements Serializable{
+class Passeger implements Serializable{
     private String full_name;
     private int seating_position;
     public String get_name(){
         return this.full_name;
     }
-    public Passeger(){}
+    
     public Passeger(String new_name, int new_seat){
         this.full_name = new_name;
         this.seating_position = new_seat;
     }
+
     public int get_position(){
         return this.seating_position;
     }
+
     public void set_name(String new_name){
         this.full_name = new_name;
     }
+
     public void set_position(int new_position){
         this.seating_position = new_position;
     }
+
     public F_a f_a;
     public void set_f_a(F_a f_a){
         this.f_a = f_a;
@@ -175,12 +192,11 @@ public class Passeger implements Serializable{
 }
 
 
-class Main {
+public class Main {
     public static void main( String[] args) throws IOException, PolosaRazgonaException, ClassNotFoundException{
-        Airport Vnukovo = new Airport(); 
+        Airport Vnukovo = new Airport("Внуково"); 
         ArrayList<Plane> planes = new ArrayList();
         ArrayList<Helicopter> helicopters = new ArrayList();
-        Vnukovo.setName("Внуково");
         Plane mk100 = new Plane("Mk-100", 50, 2);
         planes.add(mk100);
         Helicopter Vit = new Helicopter("Витязь", 4); 
@@ -201,7 +217,7 @@ class Main {
 
 
 
-public class Example
+class Example
 {
     public Example(Airport airport, ArrayList<Plane> planes, ArrayList<Helicopter> helicopters)
     {
